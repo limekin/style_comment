@@ -2,21 +2,27 @@ module StyleComment
 
     module Styles
 	    
-	    #List of all the comment styles.
+#---------------
+# 	    List of all the comment styles.
+#---------------
 	    LIST = [:hyphen_block]
 
-	    #Makes sure every comment line has a line ending.
+#---------------
+# 	    Makes sure every comment line has a line ending.
+#---------------
 	    def self.ensure_newlines(comment_lines)
 		comment_lines.map do |line|
 		    line << "\n" unless line[-1].eql? "\n"
 		end
 	    end
 
-	    #hyphen_block commenting style.
-	    #Example :
-	    #	#-----------------------------
-	    #	#  This is a sample comment
-	    #	#-----------------------------
+#---------------
+# 	    hyphen_block commenting style.
+# 	    Example :
+# 	    	#-----------------------------
+# 	    	#  This is a sample comment
+# 	    	#-----------------------------
+#---------------
 	    def self.hyphen_block(comment_lines)
 
 		build = ->(n) { '-' * n }
@@ -43,8 +49,10 @@ module StyleComment
 		@options[:style] ||= :hyphen_block
 	    end
 
-	    #Styles the comments in the file depending on options[:style]. 
-	    #The default style is :hyphen_block.
+#---------------
+# 	    Styles the comments in the file depending on options[:style]. 
+# 	    The default style is :hyphen_block.
+#---------------
 	    def style_it
 		File.open( @file, "r" ) do |input|
 		    File.open( "#{File.dirname(@file)}/sc_#{File.basename(@file)}" , "w") do |output|
@@ -67,7 +75,9 @@ module StyleComment
     end
 end
     
-#Handles the shell invokes
+#---------------
+# Handles the shell invokes
+#---------------
 file = ARGV.shift
 options = {}
 if ARGV
