@@ -15,6 +15,8 @@ Or with a particular style.
 
     ruby scr.rb <targetfile>.rb -style=<style>
 
+The modified file will be named `sc_<filename>.rb .
+
 
 
 

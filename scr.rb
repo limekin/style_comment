@@ -19,16 +19,37 @@ module StyleComment
 	    #	#-----------------------------
 	    def self.hyphen_block(comment_lines)
 
+		
 		build = ->(n) { '-' * n }
-		opening = "##{build[15]}\n" 
 
-		comment_lines.map! do |line|
-			leading_whitespaces = 	
-		    line = line.sub('#','').chomp
-		    line = "# #{line}"
+		#Gets the minimum leading white space of the comment set. 
+		#This space is then used to align all the subsequent comments.
+		min_whitespace = comment_lines.reduce(" "*500) do |min_whitespace, line|
+			whitespace = line[/^[\t\s]+/] || ""
+			min_whitespace = whitespace if whitespace.length < min_whitespace.length
+			min_whitespace
 		end
 
-		closing = "##{build[15]}\n"
+		#Builds the opening of the comment section. Maintaining leading whitespace.
+		opening = "#{min_whitespace}##{build[15]}\n" 
+
+		#Adds special styles to the comment lines.
+		#Lines with different # indentations are aligned together. 
+		#However, the actual indentation is retained.
+		#For example :
+		#	# Main comment
+		#		# Sub comment
+		#Changes to  :
+		#	# Main comment
+		#	# 	Sub comment
+		comment_lines.map! do |line|
+		    leading_whitespace = line[/^[\t\s]+/] || ""
+		    line = line.sub('#','').lstrip.chomp
+		    line = "#{min_whitespace}# #{leading_whitespace.sub(min_whitespace,'')}#{line}"
+		end
+
+		#Builds closing section of the comments.
+		closing = "#{min_whitespace}##{build[15]}\n"
 		[opening, ensure_newlines(comment_lines), closing].join ''
 	    end
 
