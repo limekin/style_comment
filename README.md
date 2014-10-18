@@ -1,15 +1,20 @@
-Style Comment
-==============
+### Style Comment
 
-A simple ruby script to modify all the comments in a file to a particular style. Created it for fun XD.
 
-Usage
------
+A simple ruby command line script to modify all the comments in a file to a particular style. Created it for fun :laughing:.
 
-`ruby scr.rb <targetfile>.rb`
-`ruby scr.rb <targetfile>.rb -style=<style>`
+Feel free to add more comment styles.
 
-The default style is hyphen_block
+#### Usage
+
+Without specifying the style (defaults to hyphen_block).
+
+    ruby scr.rb <targetfile>.rb
+
+Or with a particular style.
+
+    ruby scr.rb <targetfile>.rb -style=<style>
+
 
 
 
