@@ -5,6 +5,10 @@ module StyleComment
 	    #List of all the comment styles.
 	    LIST = [:hyphen_block]
 
+	    def self.apply( style, comment_lines, options)
+		    send( style, comment_lines, options)
+	    end
+
 	    #Makes sure every comment line has a line ending.
 	    def self.ensure_newlines(comment_lines)
 		comment_lines.map do |line|
@@ -17,21 +21,23 @@ module StyleComment
 	    #	#-----------------------------
 	    #	#  This is a sample comment
 	    #	#-----------------------------
-	    def self.hyphen_block(comment_lines)
+	    def self.hyphen_block( comment_lines, options)
 
 		
 		build = ->(n) { '-' * n }
+
+		#Finds the longest line length.
+		max_length = comment_lines.reduce(0) { |acc, line| acc < line.length ? line.length : acc }
 
 		#Gets the minimum leading white space of the comment set. 
 		#This space is then used to align all the subsequent comments.
 		min_whitespace = comment_lines.reduce(" "*500) do |min_whitespace, line|
 			whitespace = line[/^[\t\s]+/] || ""
-			min_whitespace = whitespace if whitespace.length < min_whitespace.length
-			min_whitespace
+			whitespace.length < min_whitespace.length ? whitespace : min_whitespace
 		end
 
 		#Builds the opening of the comment section. Maintaining leading whitespace.
-		opening = "#{min_whitespace}##{build[15]}\n" 
+		opening = "#{min_whitespace}##{build[max_length + 5]}\n" 
 
 		#Adds special styles to the comment lines.
 		#Lines with different # indentations are aligned together. 
@@ -49,8 +55,8 @@ module StyleComment
 		end
 
 		#Builds closing section of the comments.
-		closing = "#{min_whitespace}##{build[15]}\n"
-		[opening, ensure_newlines(comment_lines), closing].join ''
+		closing = "#{min_whitespace}##{build[max_length + 5]}\n"
+		[opening, ensure_newlines(comment_lines), closing].join
 	    end
 
 
@@ -58,6 +64,8 @@ module StyleComment
 
     class Styler
 
+	    #Note that Style constructor should only handle general defaults.
+	    #Style specific defaults should be handled in Styles.<style>.
 	    def initialize(file_path, options = {})
 		@file = file_path
 		@options = options
@@ -74,7 +82,7 @@ module StyleComment
 			    if line[/\S/] == "#"
 				comment_lines << line
 			    elsif not comment_lines.empty?
-				modified_comments = Styles.send( @options[:style],comment_lines )
+				modified_comments = Styles.apply( @options[:style],comment_lines, @options )
 				comment_lines.clear
 				output << modified_comments
 				output << line

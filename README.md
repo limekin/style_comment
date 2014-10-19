@@ -3,7 +3,7 @@
 
 A simple ruby command line script to modify all the comments in a file to a particular style. Created it for fun :laughing:.
 
-Feel free to add more comment styles.
+For a list of styles and options see `styles.md`. Feel free to add more comment styles.
 
 #### Usage
 
@@ -15,7 +15,7 @@ Or with a particular style.
 
     ruby scr.rb <targetfile>.rb -style=<style>
 
-The modified file will be named `sc_<filename>.rb .
+The modified file will be named `sc_<filename>.rb`.
 
 
 
