@@ -24,7 +24,16 @@ module StyleComment
 	    def self.hyphen_block( comment_lines, options)
 
 		
-		build = ->(n) { '-' * n }
+		#Builds hyphen_blocks depending on variations.
+		build = ->(n) do 
+		    ret = '-'*n
+		    if options[:alt]
+			1.step(ret.length-1, 2) do |i|
+			    ret[i] = ' '
+			end
+		    end
+		    ret
+		end
 
 		#Finds the longest line length.
 		max_length = comment_lines.reduce(0) { |acc, line| acc < line.length ? line.length : acc }
@@ -32,12 +41,12 @@ module StyleComment
 		#Gets the minimum leading white space of the comment set. 
 		#This space is then used to align all the subsequent comments.
 		min_whitespace = comment_lines.reduce(" "*500) do |min_whitespace, line|
-			whitespace = line[/^[\t\s]+/] || ""
-			whitespace.length < min_whitespace.length ? whitespace : min_whitespace
+		    whitespace = line[/^[\t\s]+/] || ""
+		    whitespace.length < min_whitespace.length ? whitespace : min_whitespace
 		end
 
 		#Builds the opening of the comment section. Maintaining leading whitespace.
-		opening = "#{min_whitespace}##{build[max_length + 5]}\n" 
+		opening = "#{min_whitespace}##{build[max_length + 5] unless options[:semi]}\n" 
 
 		#Adds special styles to the comment lines.
 		#Lines with different # indentations are aligned together. 
@@ -69,7 +78,7 @@ module StyleComment
 	    def initialize(file_path, options = {})
 		@file = file_path
 		@options = options
-		@options[:style] ||= :hyphen_block
+		@options[:style] ||= :hyphen_block 
 	    end
 
 	    #Styles the comments in the file depending on options[:style]. 
@@ -101,10 +110,14 @@ file = ARGV.shift
 options = {}
 if ARGV
     ARGV.each do |arg|
-       option, value = arg.split('=')
-       option = option.gsub('-','').to_sym
-       value = value.to_sym
-       options[option] = value
+	if arg.include? '='
+	    option, value = arg.split('=')
+	elsif arg.include? '-'
+	    value, option = arg.split('-')
+	end
+	option = option.gsub('-','').to_sym
+	value = value.to_sym
+	options[option] = value
     end
 end
 
