@@ -9,6 +9,9 @@ module StyleComment
 		    send( style, comment_lines, options)
 	    end
 
+
+	    private
+
 	    #Makes sure every comment line has a line ending.
 	    def self.ensure_newlines(comment_lines)
 		comment_lines.map do |line|
