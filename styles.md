@@ -7,40 +7,40 @@ types (this will be mentioned in each style by 'works with'). Btw, things in [] 
 
 List of styles.
 
-* hyphen_block 
+* simple_wrapper
 
-#### hyphen_block 
+#### Simple Wrapper 
 
 ###### Comment Style :
 
     #-------------------------------------------
-    # This is a sample hyphen_block comment.
+    # This is a sample Simple Wrapper comment.
     #-------------------------------------------
 
 ###### Specifying the style in shell :
 
-    $ ruby scr.rb <file>.rb [-style=hyphen_block] [-<optionA> -<optionB> ... ]
+    $ thor scr:prettify <file>.rb [--style=simple_wrapper] [--<optionA> --<optionB> ... ]
 
 
 ###### Options : 
 
-* `-alt`
+* `--alt`
   
   This adds space in between hyphens.
   Example :
       
       #- - - - - - - - - - - - - - - - - - - - - - - - - 
-      # This is a sample alternate hyphen_block comment.
+      # This is a sample alternate Simple Wrapper comment.
       #- - - - - - - - - - - - - - - - - - - - - - - - -
   Works with : `semi`
 
-* `-semi`
+* `--semi`
   
   This adds hyphens only below the comment block.
   Example :
 
       #
-      # This is a sample semi hyphen_block comment.
+      # This is a sample semi Simple Wrapper comment.
       #-------------------------------------------------
   Works with : `alt`
 
