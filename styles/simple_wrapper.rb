@@ -16,7 +16,7 @@ module Styles
 	    min_whitespace = min_whitespace comment_lines
 
 	    #Builds the opening of the comment section. Maintaining leading whitespace.
-	    opening = "#{min_whitespace}##{build(max_length + 5) unless @options[:semi]}\n" 
+	    opening = "#{min_whitespace}#{@options[:literal]}#{build(max_length + 5) unless @options[:semi]}\n" 
 
 	    #Adds special styles to the comment lines.
 	    #Lines with different # indentations are aligned together. 
@@ -29,12 +29,12 @@ module Styles
 	    #	# 	Sub comment
 	    comment_lines.map! do |line|
 		leading_whitespace = line[/^[\t\s]+/] || ""
-		line = line.sub('#','').lstrip.chomp
-		line = "#{min_whitespace}# #{leading_whitespace.sub(min_whitespace,'')}#{line}"
+		line = line.sub(@options[:literal],'').lstrip.chomp
+		line = "#{min_whitespace}#{@options[:literal]} #{leading_whitespace.sub(min_whitespace,'')}#{line}"
 	    end
 
 	    #Builds closing section of the comments.
-	    closing = "#{min_whitespace}##{build(max_length + 5)}\n"
+	    closing = "#{min_whitespace}#{@options[:literal]}#{build(max_length + 5)}\n"
 	    [opening, ensure_newlines(comment_lines), closing].join
 	end
 
